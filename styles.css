@@ -1,0 +1,99 @@
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+/* === START BUTTON === */
+.button-container{
+    padding-left: 15%;
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.button-container button{
+    width: 20%;
+    height: 6vh;
+    font-weight: 900;
+    font-size: 15px;
+    border-radius: 15px;
+}
+
+button:disabled{
+    background-color: rgb(149, 93, 87);
+    border-color: rgb(149, 93, 87);
+    color: lightgrey;
+}
+
+button:enabled{
+    background-color: salmon;
+    border-color: salmon;
+    color: white;
+}
+
+
+/* === DISPLAY CONTENT === */
+.container{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.display-area, .paste-area{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.display-area{
+    width: 95%;
+}
+
+/* === DISPLAY WORDS === */
+.display{
+    position: relative;
+    
+    width: 25%;
+    height: 16vh;
+    margin: 5% 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.display p{
+    color: salmon;
+}
+
+/* === PASTE AREA === */
+#meaning, #phrase, #script{
+    width: 30%;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+label{
+    padding-left: 15%;
+}
+
+#paste-meaning, #paste-phrase, #paste-script{
+    width: 95%;
+    height: 100%;
+    border-width: 2px; 
+    padding: 5%;
+    margin-top: 5%;
+}
