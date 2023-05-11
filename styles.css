@@ -1,5 +1,4 @@
-
-body{
+body {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -10,14 +9,17 @@ body{
 
 
 /* === START BUTTON === */
-.button-container{
+.button-container {
     padding-left: 15%;
+    padding-right: 10%;
     width: 90%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
 
-.button-container button{
+.button-container button {
     width: 20%;
     height: 6vh;
     font-weight: 900;
@@ -25,13 +27,13 @@ body{
     border-radius: 15px;
 }
 
-button:disabled{
+button:disabled {
     background-color: rgb(149, 93, 87);
     border-color: rgb(149, 93, 87);
     color: lightgrey;
 }
 
-button:enabled{
+button:enabled {
     background-color: salmon;
     border-color: salmon;
     color: white;
@@ -39,28 +41,28 @@ button:enabled{
 
 
 /* === DISPLAY CONTENT === */
-.container{
+.container {
     width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.display-area, .paste-area{
+.display-area, .paste-area {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.display-area{
+.display-area {
     width: 95%;
 }
 
 /* === DISPLAY WORDS === */
-.display{
+.display {
     position: relative;
-    
+
     width: 25%;
     height: 16vh;
     margin: 5% 0;
@@ -71,12 +73,12 @@ button:enabled{
 
 }
 
-.display p{
+.display p {
     color: salmon;
 }
 
 /* === PASTE AREA === */
-#meaning, #phrase, #script{
+#meaning, #phrase, #script {
     width: 30%;
     height: 50vh;
     display: flex;
@@ -86,14 +88,65 @@ button:enabled{
     font-weight: 900;
 }
 
-label{
+label {
     padding-left: 15%;
 }
 
-#paste-meaning, #paste-phrase, #paste-script{
+#paste-meaning, #paste-phrase, #paste-script {
     width: 95%;
     height: 100%;
-    border-width: 2px; 
+    border-width: 2px;
     padding: 5%;
     margin-top: 5%;
+}
+
+
+/* === ANIMATIONS === */
+.display p {
+    opacity: 0;
+    font-size: 21px;
+    margin-top: 25px;
+    text-align: center;
+
+    -webkit-transition: opacity 2s ease-in;
+    -moz-transition: opacity 2s ease-in;
+    -ms-transition: opacity 2s ease-in;
+    -o-transition: opacity 2s ease-in;
+    transition: opacity 2s ease-in;
+}
+
+.display p.load {
+    opacity: 1;
+}
+
+
+/* === CUSTOM SLIDER === */
+  
+.range-wrap {
+    position: relative;
+}
+
+.range {
+    width: 100%;
+}
+
+.bubble {
+    background: rgb(38, 117, 221);
+    color: white;
+    padding: 4px 4px;
+    position: absolute;
+    border-radius: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -30px;
+}
+
+.bubble::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: lightblue;
+    top: 39px;
+    left: 50%;
 }
