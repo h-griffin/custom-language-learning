@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,12 +9,27 @@
 
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    
+
     <div class="button-container">
         <button disabled>Start Learning</button>
-    </div>
 
+        <div style="display: flex; flex-direction: column; ">
+            <!-- <input type="range" name="slider" id="slider" value="10" min="1" max="20" oninput="sliderFunction()"  > -->
+            <!-- <output name="slider" id="sliderOutput">10</output> -->
+
+            <div class="range-wrap" style="width: 100%;">
+                <input type="range" class="range" name="slider" id="slider" value="5" min="5" max="20" oninput="sliderFunction()">
+                <output class="bubble"></output>
+              </div>
+
+            <select style="margin-top: 20px; padding: 5px 0px" id="voices" class="form-select bg-secondary text-light"></select>
+
+        </div>
+ 
+    </div>
+ 
     <div class="container">
         <div class="display-area">
 
@@ -37,10 +53,12 @@
             </div>
             <div id="phrase">
                 <label for="paste-phrase">Phrase</label>
-                <textarea type="text" id="paste-phrase"></textarea>            </div>
+                <textarea type="text" id="paste-phrase"></textarea>
+            </div>
             <div id="script">
                 <label for="paste-script">Script</label>
-                <textarea type="text" id="paste-script"></textarea>            </div>
+                <textarea type="text" id="paste-script"></textarea>
+            </div>
 
 
         </div>
@@ -50,4 +68,5 @@
 
     <script src="index.js"></script>
 </body>
+
 </html>
