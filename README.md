@@ -13,4 +13,4 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - infinite loop
 ### Description
 - This code takes in 3 pasted inputs, then enables the start button, and splits them by line break into an array to loop through. Each set is displayed for 5 seconds (phrase and script together, delayed after meaning), then loops back to the beginning of the array when finished.
-> ![phrases](./assets/v1/phrases.png)
+> ![phrases](./assets/phrases.png)
