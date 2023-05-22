@@ -1,5 +1,4 @@
-
-body{
+body {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,15 +8,18 @@ body{
 }
 
 
-/* === START BUTTON === */
-.button-container{
+/* === START BUTTON === */ 
+.button-container {
     padding-left: 15%;
+    padding-right: 10%;
     width: 90%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
 
-.button-container button{
+.button-container button {
     width: 20%;
     height: 6vh;
     font-weight: 900;
@@ -25,13 +27,13 @@ body{
     border-radius: 15px;
 }
 
-button:disabled{
+button:disabled {
     background-color: rgb(149, 93, 87);
     border-color: rgb(149, 93, 87);
     color: lightgrey;
 }
 
-button:enabled{
+button:enabled {
     background-color: salmon;
     border-color: salmon;
     color: white;
@@ -39,30 +41,30 @@ button:enabled{
 
 
 /* === DISPLAY CONTENT === */
-.container{
+.container {
     width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.display-area, .paste-area{
+.display-area, .paste-area {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.display-area{
+.display-area {
     width: 95%;
 }
 
 /* === DISPLAY WORDS === */
-.display{
+.display {
     position: relative;
-    
+
     width: 25%;
-    height: 16vh;
+    height: 10vh;
     margin: 5% 0;
     text-align: center;
     display: flex;
@@ -71,12 +73,12 @@ button:enabled{
 
 }
 
-.display p{
+.display p {
     color: salmon;
 }
 
 /* === PASTE AREA === */
-#meaning, #phrase, #script{
+#meaning, #phrase, #script {
     width: 30%;
     height: 50vh;
     display: flex;
@@ -86,14 +88,171 @@ button:enabled{
     font-weight: 900;
 }
 
-label{
+label {
     padding-left: 15%;
 }
 
-#paste-meaning, #paste-phrase, #paste-script{
+#paste-meaning, #paste-phrase, #paste-script {
     width: 95%;
     height: 100%;
-    border-width: 2px; 
+    border-width: 2px;
     padding: 5%;
     margin-top: 5%;
 }
+
+
+/* === ANIMATIONS === */
+.display p {
+    opacity: 0;
+    font-size: 21px;
+    margin-top: 25px;
+    text-align: center;
+
+    -webkit-transition: opacity 500ms ease-in;
+    -moz-transition: opacity 500ms ease-in;
+    -ms-transition: opacity 500ms ease-in;
+    -o-transition: opacity 500ms ease-in;
+    transition: opacity 500ms ease-in;
+}
+
+.display p.load {
+    opacity: 1;
+}
+
+
+/* === CUSTOM SLIDER === */
+  
+.range-wrap {
+    position: relative;
+}
+
+.range {
+    width: 100%;
+}
+
+.bubble {
+    background: rgb(38, 117, 221);
+    color: white;
+    padding: 4px 4px;
+    position: absolute;
+    border-radius: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -30px;
+}
+
+.bubble::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: lightblue;
+    top: 39px;
+    left: 50%;
+}
+
+/* === ACCODION === */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+
+    margin-top: 3%;
+    margin-left: 1.5%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .active, .accordion:hover, button.accordion p:hover, .banner div p:hover {
+    color: rgb(209 82 82);
+  }
+  
+  .panel {
+    padding: 0 18px;
+    background-color: white;
+    color: salmon;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  /* icons */
+
+  button.accordion:after {
+    /* content: 'EXPAND \02795'; Unicode character for "plus" sign (+) */
+    content: 'EXPAND +';  
+    font-size: large;
+    color: salmon;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  button.active:after {
+    /* content: "COLLAPSE \2796"; Unicode character for "minus" sign (-) */
+    content: "COLLAPSE -";  
+    color: salmon;
+  }
+
+  .accordion p {
+    margin: 0;
+  }
+
+  .panel div{
+    display: flex;
+    flex-direction: column;
+    /* color: salmon; */
+  }
+
+  button.accordion, .banner div p{
+    background-color: rgb(255, 201, 195);
+    color: salmon;
+    font-weight: bold;
+    font-size: large;
+  }
+
+  /* button.accordion p:hover, .banner div p:hover {
+    color: black;
+  } */
+
+  .banner{
+    background-color: rgb(255, 201, 195);
+    color: salmon;
+    width: 100%;
+    margin-top: 3%;
+    margin-left: 1.5%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .banner div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .banner div p, .banner div button{
+    width: 13vw;
+    margin: 0;
+    cursor: pointer;
+  }
+  .banner h3{
+
+    margin-left: 20px;
+
+  }

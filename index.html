@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,12 +9,27 @@
 
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    
+
     <div class="button-container">
         <button disabled>Start Learning</button>
-    </div>
 
+        <div style="display: flex; flex-direction: column; ">
+            <!-- <input type="range" name="slider" id="slider" value="10" min="1" max="20" oninput="sliderFunction()"  > -->
+            <!-- <output name="slider" id="sliderOutput">10</output> -->
+
+            <div class="range-wrap" style="width: 100%;">
+                <input type="range" class="range" name="slider" id="slider" value="2" min="2" max="20" oninput="sliderFunction()">
+                <output class="bubble"></output>
+              </div>
+
+            <select style="margin-top: 20px; padding: 5px 0px" id="voices" class="form-select bg-secondary text-light"></select>
+
+        </div>
+ 
+    </div>
+ 
     <div class="container">
         <div class="display-area">
 
@@ -37,17 +53,127 @@
             </div>
             <div id="phrase">
                 <label for="paste-phrase">Phrase</label>
-                <textarea type="text" id="paste-phrase"></textarea>            </div>
+                <textarea type="text" id="paste-phrase"></textarea>
+            </div>
             <div id="script">
                 <label for="paste-script">Script</label>
-                <textarea type="text" id="paste-script"></textarea>            </div>
+                <textarea type="text" id="paste-script"></textarea>
+            </div>
 
 
         </div>
 
+        
+        <div class="banner">
+            <h3>Present Tense</h3>
+
+            <div>
+                <p>load &#8593;</p>  
+                <button class="accordion" id="present"> </button>
+            </div>
+        </div>
+        
+        <div class="panel present">
+            <div id="meaning-container">
+                <h3 for="present-meaning">Meaning</h3>
+                <div type="text" class="preload">
+                    <small>present tense1</small>
+                    <small>present tense2</small>
+                    <small>present tense3</small>
+                </div>
+            </div>
+            <div id="phrase-container">
+                <h3 for="present-phrase">Phrase</h3>
+                <div type="text" class="preload">
+                    <small>present tense1</small>
+                    <small>present tense2</small>
+                    <small>present tense3</small>
+                </div>
+            </div>
+            <div id="script-container">
+                <h3 for="present-script">Script</h3>
+                <div type="text" class="preload">
+                    <small>present tense1</small>
+                    <small>present tense2</small>
+                    <small>present tense3</small>
+                </div>
+            </div>
+        </div>
+    
+        <div class="banner">
+            <h3>Future Tense</h3>
+
+            <div>
+                <p>load &#8593;</p>  
+                <button class="accordion" id="future"> </button>
+            </div>
+        </div>
+        <div class="panel future">
+            <div id="meaning-container">
+                <h3 for="future-meaning">Meaning</h3>
+                <div type="text" class="preload">
+                    <small>future tense1</small>
+                    <small>future tense2</small>
+                    <small>future tense3</small>
+                </div>
+            </div>
+            <div id="phrase-container">
+                <h3 for="future-phrase">Phrase</h3>
+                <div type="text" class="preload">
+                    <small>future tense1</small>
+                    <small>future tense2</small>
+                    <small>future tense3</small>
+                </div>
+            </div>
+            <div id="script-container">
+                <h3 for="future-script">Script</h3>
+                <div type="text" class="preload">
+                    <small>future tense1</small>
+                    <small>future tense2</small>
+                    <small>future tense3</small>
+                </div>
+            </div>    
+        </div>
+    
+        <div class="banner">
+            <h3>Past Tense</h3>
+
+            <div>
+                <p>load &#8593;</p>  
+                <button class="accordion" id="past"> </button>
+            </div>
+        </div>
+        <div class="panel past">
+            <div id="meaning-container">
+                <h3 for="past-meaning">Meaning</h3>
+                <div type="text" class="preload">
+                    <small>past tense1</small>
+                    <small>past tense2</small>
+                    <small>past tense3</small>
+                </div>
+            </div>
+            <div id="phrase-container">
+                <h3 for="past-phrase">Phrase</h3>
+                <div type="text" class="preload">
+                    <small>past tense1</small>
+                    <small>past tense2</small>
+                    <small>past tense3</small>
+                </div>
+            </div>
+            <div id="script-container">
+                <h3 for="past-script">Script</h3>
+                <div type="text" class="preload">
+                    <small>past tense1</small>
+                    <small>past tense2</small>
+                    <small>past tense3</small>
+                </div>
+            </div>    
+        </div>
     </div>
+
 
 
     <script src="index.js"></script>
 </body>
+
 </html>
