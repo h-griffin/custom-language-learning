@@ -8,7 +8,7 @@ body {
 }
 
 
-/* === START BUTTON === */
+/* === START BUTTON === */ 
 .button-container {
     padding-left: 15%;
     padding-right: 10%;
@@ -64,7 +64,7 @@ button:enabled {
     position: relative;
 
     width: 25%;
-    height: 16vh;
+    height: 10vh;
     margin: 5% 0;
     text-align: center;
     display: flex;
@@ -108,11 +108,11 @@ label {
     margin-top: 25px;
     text-align: center;
 
-    -webkit-transition: opacity 2s ease-in;
-    -moz-transition: opacity 2s ease-in;
-    -ms-transition: opacity 2s ease-in;
-    -o-transition: opacity 2s ease-in;
-    transition: opacity 2s ease-in;
+    -webkit-transition: opacity 500ms ease-in;
+    -moz-transition: opacity 500ms ease-in;
+    -ms-transition: opacity 500ms ease-in;
+    -o-transition: opacity 500ms ease-in;
+    transition: opacity 500ms ease-in;
 }
 
 .display p.load {
@@ -150,3 +150,109 @@ label {
     top: 39px;
     left: 50%;
 }
+
+/* === ACCODION === */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+
+    margin-top: 3%;
+    margin-left: 1.5%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .active, .accordion:hover, button.accordion p:hover, .banner div p:hover {
+    color: rgb(209 82 82);
+  }
+  
+  .panel {
+    padding: 0 18px;
+    background-color: white;
+    color: salmon;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  /* icons */
+
+  button.accordion:after {
+    /* content: 'EXPAND \02795'; Unicode character for "plus" sign (+) */
+    content: 'EXPAND +';  
+    font-size: large;
+    color: salmon;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  button.active:after {
+    /* content: "COLLAPSE \2796"; Unicode character for "minus" sign (-) */
+    content: "COLLAPSE -";  
+    color: salmon;
+  }
+
+  .accordion p {
+    margin: 0;
+  }
+
+  .panel div{
+    display: flex;
+    flex-direction: column;
+    /* color: salmon; */
+  }
+
+  button.accordion, .banner div p{
+    background-color: rgb(255, 201, 195);
+    color: salmon;
+    font-weight: bold;
+    font-size: large;
+  }
+
+  /* button.accordion p:hover, .banner div p:hover {
+    color: black;
+  } */
+
+  .banner{
+    background-color: rgb(255, 201, 195);
+    color: salmon;
+    width: 100%;
+    margin-top: 3%;
+    margin-left: 1.5%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .banner div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .banner div p, .banner div button{
+    width: 13vw;
+    margin: 0;
+    cursor: pointer;
+  }
+  .banner h3{
+
+    margin-left: 20px;
+
+  }

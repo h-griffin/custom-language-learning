@@ -25,3 +25,10 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - this code takes in the delay timer value and starts the interval cycle, if the delay time is changed while the interval cycle is running, it will stop the current interval and create a new one with the new speed/delay time value
 - "meaning" will be read out in english, and "script" is read out by the foreign speech object, which can be changed in the dropdown to update its voice and language **(for best results, match the selected speech language with the same language the phrase and script are written in)**
 > ![es](./assets/v2/es.png)
+
+## [V3.0 - SEPT 2022](https://github.com/h-griffin/custom-language-learning/tree/v2)
+### New Features 
+- pre-loaded past present and future tense words
+### Description
+- this code adds accordion modules of past present and future tense words that will load selected module appending to the end of the text area 
+> ![accordion](./assets/v3/accordion.png)
