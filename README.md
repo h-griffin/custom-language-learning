@@ -5,6 +5,10 @@
 paste in your english meaning, foreign phrase and script, and begin to study foreign words and phrases flashcard style on an infinite loop.
 
 # Table Of Contents
+- [v1 - Delay phrase and meaning](#v10---aug-2022)
+- [v2 - speech synthesis selection](#v20---sept-2022)
+- [v3 - preload accordion](#v30---sept-2022)
+- [v4 - speech & order controls](#v40---oct-2022)
 
 ## [V1.0 - AUG 2022](https://github.com/h-griffin/custom-language-learning/tree/v1)
 ### Features
