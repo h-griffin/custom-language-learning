@@ -1,4 +1,4 @@
-# Custom Language Learning
+# Custom Language Learning 4.0
 ## Author: [H-Griffin](https://github.com/h-griffin)
 
 # Description
@@ -26,9 +26,18 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - "meaning" will be read out in english, and "script" is read out by the foreign speech object, which can be changed in the dropdown to update its voice and language **(for best results, match the selected speech language with the same language the phrase and script are written in)**
 > ![es](./assets/v2/es.png)
 
-## [V3.0 - SEPT 2022](https://github.com/h-griffin/custom-language-learning/tree/v2)
+## [V3.0 - SEPT 2022](https://github.com/h-griffin/custom-language-learning/tree/v3)
 ### New Features 
 - pre-loaded past present and future tense words
 ### Description
 - this code adds accordion modules of past present and future tense words that will load selected module appending to the end of the text area 
 > ![accordion](./assets/v3/accordion.png)
+
+## [V4.0 - OCT 2022](https://github.com/h-griffin/custom-language-learning/tree/v4)
+### New Features 
+- speech speed/rate slider
+- meaning-phrase order toggle
+- theme colors
+### Description
+- this code adds speech rate/speed controls, an order toggle button, and red text/button colors
+> ![speech-controls](./assets/v4/speech-controls.png)

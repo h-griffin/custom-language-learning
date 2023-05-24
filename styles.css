@@ -28,14 +28,14 @@ body {
 }
 
 button:disabled {
-    background-color: rgb(149, 93, 87);
-    border-color: rgb(149, 93, 87);
+    background-color: #aa5959;
+    border-color: #aa5959;
     color: lightgrey;
 }
 
 button:enabled {
-    background-color: salmon;
-    border-color: salmon;
+    background-color: red;
+    border-color: red;
     color: white;
 }
 
@@ -74,7 +74,7 @@ button:enabled {
 }
 
 .display p {
-    color: salmon;
+    color: red;
 }
 
 /* === PASTE AREA === */
@@ -122,15 +122,15 @@ label {
 
 /* === CUSTOM SLIDER === */
   
-.range-wrap {
+.range-wrap, .range-wrap2 {
     position: relative;
 }
 
-.range {
+.range, .range2 {
     width: 100%;
 }
 
-.bubble {
+.bubble, .bubble2 {
     background: rgb(38, 117, 221);
     color: white;
     padding: 4px 4px;
@@ -141,7 +141,7 @@ label {
     top: -30px;
 }
 
-.bubble::after {
+.bubble::after, .bubble2::after {
     content: "";
     position: absolute;
     width: 2px;
@@ -179,7 +179,7 @@ label {
   .panel {
     padding: 0 18px;
     background-color: white;
-    color: salmon;
+    color: red;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
@@ -196,7 +196,7 @@ label {
     /* content: 'EXPAND \02795'; Unicode character for "plus" sign (+) */
     content: 'EXPAND +';  
     font-size: large;
-    color: salmon;
+    color: red;
     float: right;
     margin-left: 5px;
   }
@@ -204,7 +204,7 @@ label {
   button.active:after {
     /* content: "COLLAPSE \2796"; Unicode character for "minus" sign (-) */
     content: "COLLAPSE -";  
-    color: salmon;
+    color: red;
   }
 
   .accordion p {
@@ -214,12 +214,12 @@ label {
   .panel div{
     display: flex;
     flex-direction: column;
-    /* color: salmon; */
+    /* color: red; */
   }
 
   button.accordion, .banner div p{
     background-color: rgb(255, 201, 195);
-    color: salmon;
+    color: red;
     font-weight: bold;
     font-size: large;
   }
@@ -230,7 +230,7 @@ label {
 
   .banner{
     background-color: rgb(255, 201, 195);
-    color: salmon;
+    color: red;
     width: 100%;
     margin-top: 3%;
     margin-left: 1.5%;
