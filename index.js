@@ -39,36 +39,35 @@ window.speechSynthesis.onvoiceschanged = () => {
     }
 };
 
+// update speed when selected
+document.querySelector("#slider2").addEventListener('change', () => {
+    meaningSpeech.rate = document.querySelector("#slider2").value
+    scriptSpeech.rate = document.querySelector("#slider2").value
+    // console.log(meaningSpeech.rate, scriptSpeech.rate, document.querySelector("#slider2").value)
+})
+
 // update voice & language when new one is selected
 document.querySelector("#voices").addEventListener("change", () => {
     scriptSpeech.voice = voices[document.querySelector("#voices").value];
     scriptSpeech.lang = scriptSpeech.voice.lang;
 });
 
-// =========================  
-//  DELAY TIME RANGE SLIDER  
-// =========================
 
-var canPlay = false;
-var isPaused = false;
-let displayInterval; // global access to interval handle
+// ================
+// HELPER FUNCTIONS
+// ================
 
-var delayTime = 2000; // default
 
-function sliderFunction() {
-    var slider = document.getElementById("slider"); 
-
-    // update values
-    delayTime = slider.value * 1000;
-    console.log("updated delay time:", delayTime);
-
+function pause() {
+    // clear interval cycle
     clearInterval(displayInterval);
     isPaused = true;
 
+    // change button text
     document.querySelector("button").innerHTML = "Resume Learning";
+    console.log("listen button clicked, isPaused:", isPaused);
 
-    console.log("slider changed, isPaused:", isPaused);
-
+    // clear screen display
     document.getElementById("meaning-text").classList.remove('load');
     document.getElementById("phrase-text").classList.remove('load');
     document.getElementById("script-text").classList.remove('load'); 
@@ -76,7 +75,64 @@ function sliderFunction() {
     document.getElementById("meaning-text").innerHTML = ' ';
     document.getElementById("phrase-text").innerHTML = ' ';
     document.getElementById("script-text").innerHTML = ' ';
+} 
 
+function phraseAndScript(allArrs, randomIndex) {
+
+    document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
+    document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
+    document.getElementById("phrase-text").classList.add('load');
+    document.getElementById("script-text").classList.add('load');
+
+    scriptSpeech.text = document.querySelector("#script-text").innerHTML;
+    speechSynthesis.speak(scriptSpeech);
+
+    scriptSpeech.onerror = (event) => {
+        console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
+    }
+}
+function meeaning(allArrs, randomIndex) {
+    console.log('meaning')
+
+    document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
+    document.getElementById("meaning-text").classList.add('load');
+    meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
+    speechSynthesis.speak(meaningSpeech);
+
+    meaningSpeech.onerror = (event) => {
+        console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
+    }
+}
+
+// =========================  
+//  DELAY TIME & SPEED RANGE SLIDER  
+// =========================
+
+var canPlay = false;
+var isPaused = false;
+let displayInterval; // global access to interval handle
+
+var delayTime = 5000; // default
+var speechspeed = 1.0; // default
+
+function delaySlider() {
+    var slider = document.getElementById("slider"); 
+
+    // update values
+    delayTime = slider.value * 1000;
+    console.log("updated delay time:", delayTime);
+
+    pause();
+
+}
+function speedSlider() {
+    var slider = document.getElementById("slider2"); 
+
+    // update values
+    speechspeed = slider.value * 1000;
+    console.log("updated speed time:", speechspeed);
+
+    pause();
 }
 
 //  range slider value that follows slider thumb
@@ -84,6 +140,17 @@ const allRanges = document.querySelectorAll(".range-wrap");
 allRanges.forEach(wrap => {
   const range = wrap.querySelector(".range");
   const bubble = wrap.querySelector(".bubble");
+
+  range.addEventListener("input", () => {
+    setBubble(range, bubble);
+  });
+  setBubble(range, bubble);
+});
+
+const allRanges2 = document.querySelectorAll(".range-wrap2");
+allRanges2.forEach(wrap => {
+  const range = wrap.querySelector(".range2");
+  const bubble = wrap.querySelector(".bubble2");
 
   range.addEventListener("input", () => {
     setBubble(range, bubble);
@@ -101,6 +168,18 @@ function setBubble(range, bubble) {
 
   bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
 }
+ 
+// =========================  
+//  SET DISPLAY ORDER  
+// ========================= 
+var isMeaningFirst = true;
+
+document.getElementById("listen").addEventListener("click", () => {
+    isMeaningFirst = !isMeaningFirst;
+
+    pause();
+})
+
 
 // =========================  
 //  DISPLAY & AUDIO CYCLES  
@@ -143,44 +222,28 @@ async function start() {
         textarea.removeEventListener("change", () => {canStart()});
     })
 
-    // loaded <<<<<<
     var allArrs = []
     // split all textarea inputs by line break  
     document.querySelectorAll("textarea").forEach( textarea => {
         allArrs.push(textarea.value.split('\n').filter( function(e) { return e.trim().length > 0; } ));
     })
 
-    // loaded <<<<
-    var randomIndex = Math.floor(Math.random() * allArrs[0].length);
 
+    // select index to match meaning adn phrases
+    var randomIndex = Math.floor(Math.random() * allArrs[0].length);
     //skip first delay
     if (!isPaused){ // dont show/speak if paused (settings adjusted)
-        document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
-        document.getElementById("meaning-text").classList.add('load');
-        meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
-        speechSynthesis.speak(meaningSpeech);
-
-        meaningSpeech.onerror = (event) => {
-            console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
+        if(isMeaningFirst){
+            meeaning(allArrs, randomIndex);
+            setTimeout(() => {
+                if(!isPaused){ phraseAndScript(allArrs, randomIndex) }
+            }, delayTime); 
+        }else{
+            phraseAndScript(allArrs, randomIndex)
+            setTimeout(() => {
+                if(!isPaused){ meeaning(allArrs, randomIndex) }
+            }, delayTime);
         }
-
-        setTimeout(() => {
-            // delay phrase and script 2 seconds
-            if(!isPaused){
-                document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
-                document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
-                document.getElementById("phrase-text").classList.add('load');
-                document.getElementById("script-text").classList.add('load');
-
-                scriptSpeech.text = document.querySelector("#script-text").innerHTML;
-                speechSynthesis.speak(scriptSpeech);
-
-                scriptSpeech.onerror = (event) => {
-                    console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
-                }
-            }
-            
-        }, delayTime);  
 
         // cycle all displays  
         displayInterval = setInterval(() => {updateDisplay(displayInterval, allArrs)}, delayTime*2);
@@ -197,38 +260,22 @@ var updateDisplay = function(displayInterval ,allArrs){
     document.getElementById("phrase-text").classList.remove('load');
     document.getElementById("script-text").classList.remove('load');
     
+
+    // select index to match meaning adn phrases
+    var randomIndex = Math.floor(Math.random() * allArrs[0].length);
     if(!isPaused){
         setTimeout(() => {  
-            var randomIndex = Math.floor(Math.random() * allArrs[0].length);
-            // display current match
-            document.getElementById("meaning-text").classList.add('load');
-            document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
-            
-            meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
-            speechSynthesis.speak(meaningSpeech);
-            meaningSpeech.onerror = (event) => {
-                console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
+            if(isMeaningFirst){
+                meeaning(allArrs, randomIndex);
+                setTimeout(() => {
+                    if(!isPaused){ phraseAndScript(allArrs, randomIndex) }
+                }, delayTime);  
+            }else{
+                phraseAndScript(allArrs, randomIndex)
+                setTimeout(() => {
+                    if(!isPaused){ meeaning(allArrs, randomIndex) }
+                }, delayTime);
             }
-            
-            // delay phrase and script from meaning 
-            setTimeout(() => {
-                if(!isPaused){
-                    document.getElementById("phrase-text").classList.add('load');
-                    document.getElementById("script-text").classList.add('load');
-                    document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
-                    document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
-
-                    if(!isPaused){
-                        scriptSpeech.text = document.querySelector("#script-text").innerHTML;
-                        speechSynthesis.speak(scriptSpeech);
-
-                        scriptSpeech.onerror = (event) => {
-                            console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
-                        }
-                    }
-                }
-                
-            }, delayTime);  
         }, 500); // css transition duration <<< this timer waits for fade out before showing next meaning
 
     }
@@ -288,3 +335,10 @@ loadBtn.forEach(btn => {
     })
 });
  
+
+ 
+
+
+
+
+
