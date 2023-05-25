@@ -1,4 +1,4 @@
-# Custom Language Learning 4.0
+# Custom Language Learning 5.0
 ## Author: [H-Griffin](https://github.com/h-griffin)
 
 # Description
@@ -9,6 +9,7 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - [v2 - speech synthesis selection](#v20---sept-2022)
 - [v3 - preload accordion](#v30---sept-2022)
 - [v4 - speech & order controls](#v40---oct-2022)
+- [v5 - quiz mode](#v50---nov-2022)
 
 ## [V1.0 - AUG 2022](https://github.com/h-griffin/custom-language-learning/tree/v1)
 ### Features
@@ -45,3 +46,15 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 ### Description
 - this code adds speech rate/speed controls, an order toggle button, and red text/button colors
 > ![speech-controls](./assets/v4/speech-controls.png)
+
+## [V5.0 - NOV 2022](https://github.com/h-griffin/custom-language-learning/tree/v5)
+### New Features 
+- quiz mode toggle
+- speech-to-text recognition  
+- transcription validation
+- browser beep on confirmation
+### Description
+- this code adds quiz mode and speech recognition, a meaning is read out, then ear icon and css timer appear and listen for speech, when a final transcript is decided, it checks if it contains the script anywhere in the transcript and displays a green check with a incremented score and browser beep, or a red x. 
+- the speech recognition language is pulled from the selected language for speech synthesis.
+- while quiz mode is active, the delay time slider control and the order toggle control are disabled.
+> ![quiz](./assets/v5/quiz.png)
