@@ -19,6 +19,8 @@ body {
     position: relative;
 }
 
+
+
 .button-container button {
     width: 20%;
     height: 6vh;
@@ -256,3 +258,97 @@ label {
     margin-left: 20px;
 
   }
+
+/* control button contianer */
+.mode-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+#score{
+    color: red;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+#score::before{
+    content: " Score: ";
+}
+
+#status{
+    display: none;
+    font-size:20px;
+    transform: scale(2);
+    position: absolute;
+    top: 25px;
+    left: -60px;
+}
+
+#icon{
+    display: none;
+    transform: scale(2);
+    top: 0px;
+    z-index: 2;
+    left: -55px;
+    position: absolute;
+    opacity: 1;
+
+    -webkit-transition: opacity 500ms ease-in;
+    -moz-transition: opacity 500ms ease-in;
+    -ms-transition: opacity 500ms ease-in;
+    -o-transition: opacity 500ms ease-in;
+    transition: opacity 500ms ease-in;
+}
+
+#speech-text{
+    margin-left: -20px;
+    width: 200px;
+    position: absolute;
+}
+
+
+
+.timer {
+    background: -webkit-linear-gradient(left, skyBlue 50%, #eee 50%);
+    border-radius: 100%;
+    height: calc(var(--size) * 1px);
+    width: calc(var(--size) * 1px);
+    position: relative;
+    animation: time calc(var(--duration) * 1s) steps(1000, start) infinite;
+    mask: radial-gradient(transparent 50%,#000 50%);
+      /* mask: radial-gradient(transparent 50%,#000 50%); */
+    z-index: 1;
+}
+.mask {
+    border-radius: 100% 0 0 100% / 50% 0 0 50%;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 50%;
+    animation: mask calc(var(--duration) * 1s) steps(500, start) infinite;
+    transform-origin: 100% 50%;
+}
+@keyframes time {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes mask {
+    0% {
+        background: #eee;
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        background: #eee;
+        -webkit-transform: rotate(-180deg);
+    }
+    50.01% {
+        background: skyBlue;
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        background: skyBlue;
+        -webkit-transform: rotate(-180deg);
+    }
+}

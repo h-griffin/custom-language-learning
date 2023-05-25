@@ -1,6 +1,5 @@
  
-
-
+ 
 // ====================
 //  TEXT TO SPEECH  
 // ====================
@@ -10,6 +9,13 @@ if ('speechSynthesis' in window) {
 }else{
     // Speech Synthesis Not Supported 
     alert("Sorry, your browser doesn't support text to speech!");
+}
+
+if ("webkitSpeechRecognition" in window) {
+
+} else {
+    alert("Speech Recognition Not Available")
+    document.getElementById("scoreButton").disabled = true;
 }
 
 let meaningSpeech = new SpeechSynthesisUtterance();
@@ -43,7 +49,6 @@ window.speechSynthesis.onvoiceschanged = () => {
 document.querySelector("#slider2").addEventListener('change', () => {
     meaningSpeech.rate = document.querySelector("#slider2").value
     scriptSpeech.rate = document.querySelector("#slider2").value
-    // console.log(meaningSpeech.rate, scriptSpeech.rate, document.querySelector("#slider2").value)
 })
 
 // update voice & language when new one is selected
@@ -57,6 +62,14 @@ document.querySelector("#voices").addEventListener("change", () => {
 // HELPER FUNCTIONS
 // ================
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function play() {
+    var audio = new Audio('./assets/ping-82822.mp3');
+    audio.play();
+}
 
 function pause() {
     // clear interval cycle
@@ -65,7 +78,7 @@ function pause() {
 
     // change button text
     document.querySelector("button").innerHTML = "Resume Learning";
-    console.log("listen button clicked, isPaused:", isPaused);
+    console.log("control button clicked, isPaused:", isPaused);
 
     // clear screen display
     document.getElementById("meaning-text").classList.remove('load');
@@ -75,45 +88,79 @@ function pause() {
     document.getElementById("meaning-text").innerHTML = ' ';
     document.getElementById("phrase-text").innerHTML = ' ';
     document.getElementById("script-text").innerHTML = ' ';
+
+    document.querySelector("#icon").style.display = "none";
+    document.querySelector("#status").style.display = "none";
+
+    recognition.abort();
 } 
 
 function phraseAndScript(allArrs, randomIndex) {
+    return new Promise(resolve => {
+        
+        // set/display next set and speek phrase
+        document.getElementById("speech-text").innerHTML =  " "; 
+        document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
+        document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
+        document.getElementById("phrase-text").classList.add('load');
+        document.getElementById("script-text").classList.add('load');
 
-    document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
-    document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
-    document.getElementById("phrase-text").classList.add('load');
-    document.getElementById("script-text").classList.add('load');
+        scriptSpeech.text = document.querySelector("#script-text").innerHTML;
+        speechSynthesis.speak(scriptSpeech);
 
-    scriptSpeech.text = document.querySelector("#script-text").innerHTML;
-    speechSynthesis.speak(scriptSpeech);
+        scriptSpeech.onerror = (event) => {
+            console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
+        }
 
-    scriptSpeech.onerror = (event) => {
-        console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
-    }
+        setTimeout(() => {
+            resolve("sucess!");
+        }, 3000); //timer to allow for speech to finish
+    })
 }
+
+
 function meeaning(allArrs, randomIndex) {
-    console.log('meaning')
+    return new Promise(resolve => {
 
-    document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
-    document.getElementById("meaning-text").classList.add('load');
-    meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
-    speechSynthesis.speak(meaningSpeech);
+        // set/display next set and speek phrase
+        document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
+        document.getElementById("meaning-text").classList.add('load');
+        meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
+        speechSynthesis.speak(meaningSpeech);
 
-    meaningSpeech.onerror = (event) => {
-        console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
-    }
+        meaningSpeech.onerror = (event) => {
+            console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
+        }
+
+        setTimeout(() => {
+            resolve("sucess!");
+        }, 3000); //timer to allow for speech to finish
+    })
 }
+
+
+
+
+
+ 
 
 // =========================  
 //  DELAY TIME & SPEED RANGE SLIDER  
 // =========================
 
-var canPlay = false;
-var isPaused = false;
-let displayInterval; // global access to interval handle
+var canPlay = false;        // ensures all sets have pairs
+var isPaused = false;       // interval cycle control
+let displayInterval;        // global access to interval handle
 
-var delayTime = 5000; // default
-var speechspeed = 1.0; // default
+// defualt control settings
+var delayTime = 5000;  
+var speechspeed = 1.0;  
+let isQuizMode = false;     // quizmode control
+var isMeaningFirst = true;  // order control
+
+// quiz mode settings
+let final_transcript = "";  // speech to text result
+let quizscore = 0;          // quiz mode session score
 
 function delaySlider() {
     var slider = document.getElementById("slider"); 
@@ -172,11 +219,26 @@ function setBubble(range, bubble) {
 // =========================  
 //  SET DISPLAY ORDER  
 // ========================= 
-var isMeaningFirst = true;
 
+// onclick toggle meaning/phrase order
 document.getElementById("listen").addEventListener("click", () => {
     isMeaningFirst = !isMeaningFirst;
 
+    pause();
+})
+
+// onclick toggle quiz mode
+document.getElementById("scoreButton").addEventListener("click", () => {
+    isQuizMode = !isQuizMode;
+    
+    // disable controls when in quizMode
+    document.getElementById("listen").disabled = !document.getElementById("listen").disabled;
+    document.getElementById("slider").disabled = !document.getElementById("slider").disabled;
+    
+    // show score counter when in quizMode 
+    isQuizMode ? document.getElementById("score").style.display = 'block' : document.getElementById("score").style.display = 'none'
+    isQuizMode ? document.getElementById("delay-bubble").style.display = 'none' : document.getElementById("delay-bubble").style.display = 'block'
+    
     pause();
 })
 
@@ -201,6 +263,7 @@ document.querySelectorAll("textarea").forEach( textarea => {
 function canStart() {
     console.log("== canStart() ==");
  
+    // clear whitespace
     meaningText = meaning.value.replace(/^\s+/, '').replace(/\s+$/, '');
     phraseText = phrase.value.replace(/^\s+/, '').replace(/\s+$/, '');
     scriptText = script.value.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -208,10 +271,11 @@ function canStart() {
     if (meaningText !== '' && phraseText !== '' && scriptText !== ''){
         document.querySelector("button").disabled = false;
         canPlay = true;
-    } 
+    }
+
 }
 
-// start cycle display
+// start display cycle 
 async function start() {
     isPaused = false;
     document.querySelector("button").innerHTML = "Learning";
@@ -228,25 +292,27 @@ async function start() {
         allArrs.push(textarea.value.split('\n').filter( function(e) { return e.trim().length > 0; } ));
     })
 
-
-    // select index to match meaning adn phrases
+    // select index to match meaning and phrases
     var randomIndex = Math.floor(Math.random() * allArrs[0].length);
+
     //skip first delay
     if (!isPaused){ // dont show/speak if paused (settings adjusted)
-        if(isMeaningFirst){
+        if ( isQuizMode ){
+            quizOrder(allArrs);
+        }else if(isMeaningFirst && !isQuizMode){
             meeaning(allArrs, randomIndex);
             setTimeout(() => {
                 if(!isPaused){ phraseAndScript(allArrs, randomIndex) }
             }, delayTime); 
         }else{
-            phraseAndScript(allArrs, randomIndex)
+            phraseAndScript(allArrs, randomIndex);
             setTimeout(() => {
                 if(!isPaused){ meeaning(allArrs, randomIndex) }
             }, delayTime);
         }
 
-        // cycle all displays  
-        displayInterval = setInterval(() => {updateDisplay(displayInterval, allArrs)}, delayTime*2);
+        // cycle all displays 
+        if (!isQuizMode) { displayInterval = setInterval(() => {updateDisplay(displayInterval, allArrs)}, delayTime*2); } 
     }
   
 }
@@ -259,7 +325,6 @@ var updateDisplay = function(displayInterval ,allArrs){
     document.getElementById("meaning-text").classList.remove('load');
     document.getElementById("phrase-text").classList.remove('load');
     document.getElementById("script-text").classList.remove('load');
-    
 
     // select index to match meaning adn phrases
     var randomIndex = Math.floor(Math.random() * allArrs[0].length);
@@ -277,10 +342,93 @@ var updateDisplay = function(displayInterval ,allArrs){
                 }, delayTime);
             }
         }, 500); // css transition duration <<< this timer waits for fade out before showing next meaning
+    }
+};
 
+ 
+async function quizOrder(allArrs) {
+    console.log('== quiz order ==')
+
+    var randomIndex = Math.floor(Math.random() * allArrs[0].length);
+
+    // reset previous display
+    document.getElementById("meaning-text").classList.remove('load');
+    document.getElementById("phrase-text").classList.remove('load');
+    document.getElementById("script-text").classList.remove('load');
+    
+    await meeaning(allArrs, randomIndex);
+
+    await listen(); 
+
+    if (final_transcript.includes(allArrs[2][randomIndex])) {   
+        play();
+        quizscore++;
+        document.getElementById("score").innerHTML = quizscore;
+        document.getElementById("icon").innerHTML = "&#9989;" // check
+
+    } else {
+        document.getElementById("icon").innerHTML = "&#10060;" // x
+        await delay(1000);
     }
 
+    await phraseAndScript(allArrs, randomIndex);
+    document.getElementById("icon").style.display = 'none'; // clear status icon
+
+    // loop
+    if (!isPaused){ quizOrder(allArrs); }
+}
+
+
+window.SpeechRecognition = window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+recognition.lang = scriptSpeech.lang; // match script/speech lang with speech recodnition language 
+
+async function listen() {
+    // reset previous speech result
+    document.getElementById("speech-text").innerHTML =  "";
+    document.getElementById("speech-text").style.opacity = "0";
+    document.querySelector("#icon").style.display = "none";
+
+    final_transcript = '';
+
+    return new Promise(resolve => {
+    
+        document.querySelector("#icon").innerHTML = "&#128066;"; // ear
+        document.querySelector("#status").style.display = "block";
+        document.querySelector("#icon").style.display = "block";
+        recognition.start();
+        
+        setTimeout(() => {
+            recognition.stop();
+            document.querySelector("#status").style.display = "none"; // clear css timer
+            resolve("sucess!");
+        }, 7000); //timer to allow for speech to finish
+    })
+}
+
+
+recognition.onresult = (event) => {
+    let interim_transcript = "";
+
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+            final_transcript = event.results[i][0].transcript;
+            // recognition.stop();
+        } else {
+            interim_transcript += event.results[i][0].transcript;
+        }
+    }
+
+    document.getElementById("speech-text").innerHTML = final_transcript;
+    document.getElementById("speech-text").style.color = "red";
+    document.getElementById("speech-text").style.opacity = "1";
 };
+
+recognition.onerror = (event) => {
+    console.log(`(speech recodnition) An error has occurred with the speech recodnition: ${event.error}`);
+}
+
 
 // ================
 // ACCORDION
@@ -337,6 +485,7 @@ loadBtn.forEach(btn => {
  
 
  
+
 
 
 
