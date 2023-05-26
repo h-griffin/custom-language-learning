@@ -284,6 +284,13 @@ label {
     left: -60px;
 }
 
+ 
+.shortcuts{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-around;
+}
+
 #icon{
     display: none;
     transform: scale(2);
