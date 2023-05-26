@@ -60,7 +60,7 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - while quiz mode is active, the delay time slider control and the order toggle control are disabled.
 > ![quiz](./assets/v5/quiz.png)
 
-## [V6.0 - FEB 2023](https://github.com/h-griffin/custom-language-learning/tree/v5)
+## [V6.0 - FEB 2023](https://github.com/h-griffin/custom-language-learning/tree/v6)
 ### New Features 
 - A - show answer (skip delay)
 - S - skip question (prompt group)
