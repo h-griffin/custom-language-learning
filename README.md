@@ -1,4 +1,4 @@
-# Custom Language Learning 5.0
+# Custom Language Learning 6.0
 ## Author: [H-Griffin](https://github.com/h-griffin)
 
 # Description
@@ -10,6 +10,7 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - [v3 - preload accordion](#v30---sept-2022)
 - [v4 - speech & order controls](#v40---oct-2022)
 - [v5 - quiz mode](#v50---nov-2022)
+- **[v6 - keyboard shortcuts](#v60---feb-2023)**
 
 ## [V1.0 - AUG 2022](https://github.com/h-griffin/custom-language-learning/tree/v1)
 ### Features
@@ -58,3 +59,13 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - the speech recognition language is pulled from the selected language for speech synthesis.
 - while quiz mode is active, the delay time slider control and the order toggle control are disabled.
 > ![quiz](./assets/v5/quiz.png)
+
+## [V6.0 - FEB 2023](https://github.com/h-griffin/custom-language-learning/tree/v6)
+### New Features 
+- A - show answer (skip delay)
+- S - skip question (prompt group)
+- P - pause play
+### Description
+- this code adds keyboard shortcuts, which work in both display orders 
+- during quiz mode, showing answer or skipping is disabled, except for pause and play.
+> ![shortcuts](./assets/v6/shortcuts.png)

@@ -15,7 +15,7 @@ if ("webkitSpeechRecognition" in window) {
 
 } else {
     alert("Speech Recognition Not Available")
-    document.getElementById("scoreButton").disabled = true;
+    document.getElementById("toggle-quiz").disabled = true;
 }
 
 let meaningSpeech = new SpeechSynthesisUtterance();
@@ -75,6 +75,7 @@ function pause() {
     // clear interval cycle
     clearInterval(displayInterval);
     isPaused = true;
+    questionNumber = 0;
 
     // change button text
     document.querySelector("button").innerHTML = "Resume Learning";
@@ -95,18 +96,21 @@ function pause() {
     recognition.abort();
 } 
 
-function phraseAndScript(allArrs, randomIndex) {
+function phraseAndScript(randomIndex) {
     return new Promise(resolve => {
-        
+        console.log(randomIndex, questionNumber)
         // set/display next set and speek phrase
-        document.getElementById("speech-text").innerHTML =  " "; 
-        document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
-        document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
-        document.getElementById("phrase-text").classList.add('load');
-        document.getElementById("script-text").classList.add('load');
-
-        scriptSpeech.text = document.querySelector("#script-text").innerHTML;
-        speechSynthesis.speak(scriptSpeech);
+        if (randomIndex === questionNumber && !isDelaySkipped) {
+            
+            document.getElementById("speech-text").innerHTML =  " "; 
+            document.getElementById("phrase-text").innerHTML = allArrs[1][randomIndex] ? allArrs[1][randomIndex] : ' ';
+            document.getElementById("script-text").innerHTML = allArrs[2][randomIndex] ? allArrs[2][randomIndex] : ' ';
+            document.getElementById("phrase-text").classList.add('load');
+            document.getElementById("script-text").classList.add('load');
+            
+            scriptSpeech.text = document.querySelector("#script-text").innerHTML;
+            speechSynthesis.speak(scriptSpeech);
+        }
 
         scriptSpeech.onerror = (event) => {
             console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
@@ -114,19 +118,23 @@ function phraseAndScript(allArrs, randomIndex) {
 
         setTimeout(() => {
             resolve("sucess!");
+            console.log("resolved")
         }, 3000); //timer to allow for speech to finish
     })
 }
 
 
-function meeaning(allArrs, randomIndex) {
+function meeaning(randomIndex) {
     return new Promise(resolve => {
 
-        // set/display next set and speek phrase
-        document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
-        document.getElementById("meaning-text").classList.add('load');
-        meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
-        speechSynthesis.speak(meaningSpeech);
+        
+        if (randomIndex === questionNumber && !isDelaySkipped) {
+            // set/display next set and speek phrase
+            document.getElementById("meaning-text").innerHTML = allArrs[0][randomIndex] ? allArrs[0][randomIndex] : ' ';
+            document.getElementById("meaning-text").classList.add('load');
+            meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
+            speechSynthesis.speak(meaningSpeech);
+        }
 
         meaningSpeech.onerror = (event) => {
             console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
@@ -134,6 +142,7 @@ function meeaning(allArrs, randomIndex) {
 
         setTimeout(() => {
             resolve("sucess!");
+            console.log("resolved")
         }, 3000); //timer to allow for speech to finish
     })
 }
@@ -148,9 +157,14 @@ function meeaning(allArrs, randomIndex) {
 //  DELAY TIME & SPEED RANGE SLIDER  
 // =========================
 
-var canPlay = false;        // ensures all sets have pairs
+var canPlay = false;        // ensures all input sets have pairs
 var isPaused = false;       // interval cycle control
 let displayInterval;        // global access to interval handle
+let allArrs = [];           // global access to input text
+
+let questionNumber = 0;     // match randomIndex pairs for pause/play/skip (when resumed it does not continue phrase for previous meaning skipped)
+let isDelaySkipped = false; // cancel promise when skipping to answer
+let isAnswerDisplayed = false; // disable skipping to answer when asnwer is showing
 
 // defualt control settings
 var delayTime = 5000;  
@@ -221,18 +235,28 @@ function setBubble(range, bubble) {
 // ========================= 
 
 // onclick toggle meaning/phrase order
-document.getElementById("listen").addEventListener("click", () => {
+document.getElementById("toggle-order").addEventListener("click", () => {
     isMeaningFirst = !isMeaningFirst;
+    isMeaningFirst ? document.getElementById("toggle-order").innerHTML = "Toggle Order: 1-2" : document.getElementById("toggle-order").innerHTML = "Toggle Order: 2-1"
 
     pause();
 })
 
 // onclick toggle quiz mode
-document.getElementById("scoreButton").addEventListener("click", () => {
+document.getElementById("toggle-quiz").addEventListener("click", () => {
     isQuizMode = !isQuizMode;
+    if (isQuizMode) {
+        document.getElementById("toggle-quiz").innerHTML = "Toggle Quiz Mode: O";
+        document.getElementById("a").style.display = 'none';
+        document.getElementById("s").style.display = 'none';
+    } else {
+        document.getElementById("toggle-quiz").innerHTML = "Toggle Quiz Mode: I";
+        document.getElementById("a").style.display = 'block';
+        document.getElementById("s").style.display = 'block';
+    }
     
     // disable controls when in quizMode
-    document.getElementById("listen").disabled = !document.getElementById("listen").disabled;
+    document.getElementById("toggle-order").disabled = !document.getElementById("toggle-order").disabled;
     document.getElementById("slider").disabled = !document.getElementById("slider").disabled;
     
     // show score counter when in quizMode 
@@ -286,7 +310,7 @@ async function start() {
         textarea.removeEventListener("change", () => {canStart()});
     })
 
-    var allArrs = []
+    allArrs = []
     // split all textarea inputs by line break  
     document.querySelectorAll("textarea").forEach( textarea => {
         allArrs.push(textarea.value.split('\n').filter( function(e) { return e.trim().length > 0; } ));
@@ -294,33 +318,43 @@ async function start() {
 
     // select index to match meaning and phrases
     var randomIndex = Math.floor(Math.random() * allArrs[0].length);
+    questionNumber = randomIndex;
 
     //skip first delay
     if (!isPaused){ // dont show/speak if paused (settings adjusted)
         if ( isQuizMode ){
-            quizOrder(allArrs);
+            quizOrder();
         }else if(isMeaningFirst && !isQuizMode){
-            meeaning(allArrs, randomIndex);
+            meeaning(randomIndex);
             setTimeout(() => {
-                if(!isPaused){ phraseAndScript(allArrs, randomIndex) }
+                if(!isPaused && !isDelaySkipped){ 
+                    isAnswerDisplayed = true;
+                    phraseAndScript(randomIndex); 
+                }
             }, delayTime); 
+            isAnswerDisplayed = false;
         }else{
-            phraseAndScript(allArrs, randomIndex);
+            phraseAndScript(randomIndex);
             setTimeout(() => {
-                if(!isPaused){ meeaning(allArrs, randomIndex) }
+                if(!isPaused && !isDelaySkipped){ 
+                    isAnswerDisplayed = true;
+                    meeaning(randomIndex); 
+                }
             }, delayTime);
+            isAnswerDisplayed = false;
         }
 
         // cycle all displays 
-        if (!isQuizMode) { displayInterval = setInterval(() => {updateDisplay(displayInterval, allArrs)}, delayTime*2); } 
+        if (!isQuizMode) { displayInterval = setInterval(() => {updateDisplay(displayInterval)}, delayTime*2); } 
     }
   
 }
 
-var updateDisplay = function(displayInterval ,allArrs){
+var updateDisplay = function(displayInterval){
     console.log("== updateDisplays() ==");
     console.log("delay time:", delayTime);
     
+    isDelaySkipped = false; // reset skip for new cycle
     // reset previous display
     document.getElementById("meaning-text").classList.remove('load');
     document.getElementById("phrase-text").classList.remove('load');
@@ -328,35 +362,43 @@ var updateDisplay = function(displayInterval ,allArrs){
 
     // select index to match meaning adn phrases
     var randomIndex = Math.floor(Math.random() * allArrs[0].length);
+    questionNumber = randomIndex;
     if(!isPaused){
         setTimeout(() => {  
             if(isMeaningFirst){
-                meeaning(allArrs, randomIndex);
+                meeaning( randomIndex);
                 setTimeout(() => {
-                    if(!isPaused){ phraseAndScript(allArrs, randomIndex) }
+                    if(!isPaused && !isDelaySkipped){ 
+                        isAnswerDisplayed = true;
+                        phraseAndScript( randomIndex) }
                 }, delayTime);  
+                isAnswerDisplayed = false;
             }else{
-                phraseAndScript(allArrs, randomIndex)
+                phraseAndScript( randomIndex)
                 setTimeout(() => {
-                    if(!isPaused){ meeaning(allArrs, randomIndex) }
+                    if(!isPaused && !isDelaySkipped){ 
+                        isAnswerDisplayed = true;
+                        meeaning( randomIndex) }
                 }, delayTime);
+                isAnswerDisplayed = false;
             }
         }, 500); // css transition duration <<< this timer waits for fade out before showing next meaning
     }
 };
 
  
-async function quizOrder(allArrs) {
+async function quizOrder() {
     console.log('== quiz order ==')
 
     var randomIndex = Math.floor(Math.random() * allArrs[0].length);
+    // questionNumber = randomIndex;
 
     // reset previous display
     document.getElementById("meaning-text").classList.remove('load');
     document.getElementById("phrase-text").classList.remove('load');
     document.getElementById("script-text").classList.remove('load');
     
-    await meeaning(allArrs, randomIndex);
+    await meeaning(randomIndex);
 
     await listen(); 
 
@@ -371,11 +413,11 @@ async function quizOrder(allArrs) {
         await delay(1000);
     }
 
-    await phraseAndScript(allArrs, randomIndex);
+    await phraseAndScript(randomIndex);
     document.getElementById("icon").style.display = 'none'; // clear status icon
 
     // loop
-    if (!isPaused){ quizOrder(allArrs); }
+    if (!isPaused){ quizOrder(); }
 }
 
 
@@ -488,6 +530,65 @@ loadBtn.forEach(btn => {
 
 
 
+// keyboard shortcuts
+document.addEventListener("keypress", function(event) {
+    // P - pause/play
+    if (event.key == 'p' ) {
+        if (isPaused){
+            console.log('P - Play');
+            start();
+        } else {
+            console.log('P - Pause');
+            pause();
+        }
+    }
+    // S - skip
+    if (event.key == 's' ) {
+        if(!isPaused && !isQuizMode){
+            console.log('S - Skip');
+            pause();
+            start();
+        }
+    }
+    // A - answer
+    if (event.key == 'a' ) {
+        if(!isPaused && !isQuizMode && !isAnswerDisplayed){
+            console.log('A - Answer');
+            isDelaySkipped = true;
+            isAnswerDisplayed = true;
 
+            if (isMeaningFirst) {
+                // answer - phrase & script
+                document.getElementById("speech-text").innerHTML =  " "; 
+                document.getElementById("phrase-text").innerHTML = allArrs[1][questionNumber] ? allArrs[1][questionNumber] : ' ';
+                document.getElementById("script-text").innerHTML = allArrs[2][questionNumber] ? allArrs[2][questionNumber] : ' ';
+                document.getElementById("phrase-text").classList.add('load');
+                document.getElementById("script-text").classList.add('load');
+                
+                scriptSpeech.text = document.querySelector("#script-text").innerHTML;
+                speechSynthesis.speak(scriptSpeech);
+
+                scriptSpeech.onerror = (event) => {
+                    console.log(`(phrase speech) An error has occurred with the speech synthesis: ${event.error}`);
+                }
+                questionNumber++; // temp increase so the original promise does not match key and play (this is reset for new/next question pair)
+            } else {
+                // answer - meaning
+                document.getElementById("meaning-text").innerHTML = allArrs[0][questionNumber] ? allArrs[0][questionNumber] : ' ';
+                document.getElementById("meaning-text").classList.add('load');
+                meaningSpeech.text = document.querySelector("#meaning-text").innerHTML;
+                speechSynthesis.speak(meaningSpeech);
+        
+                meaningSpeech.onerror = (event) => {
+                    console.log(`(meaning speech) An error has occurred with the speech synthesis: ${event.error}`);
+                }
+                questionNumber++;
+            }
+
+        }
+    }
+
+
+});
 
 
