@@ -1,4 +1,4 @@
-# Custom Language Learning 6.0
+# Custom Language Learning 7.0
 ## Author: [H-Griffin](https://github.com/h-griffin)
 
 # Description
@@ -10,7 +10,8 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - [v3 - preload accordion](#v30---sept-2022)
 - [v4 - speech & order controls](#v40---oct-2022)
 - [v5 - quiz mode](#v50---nov-2022)
-- **[v6 - keyboard shortcuts](#v60---feb-2023)**
+- [v6 - keyboard shortcuts](#v60---feb-2023)
+- **[v7 - mobile styles](#v70---may-2023)**
 
 ## [V1.0 - AUG 2022](https://github.com/h-griffin/custom-language-learning/tree/v1)
 ### Features
@@ -69,3 +70,10 @@ paste in your english meaning, foreign phrase and script, and begin to study for
 - this code adds keyboard shortcuts, which work in both display orders 
 - during quiz mode, showing answer or skipping is disabled, except for pause and play.
 > ![shortcuts](./assets/v6/shortcuts.png)
+
+## [V7.0 - MAY 2023](https://github.com/h-griffin/custom-language-learning/tree/v7)
+### New Features 
+- responsive mobile layout
+### Description
+- this code adds responsive mobile tablet and desktop styles 
+> ![tablet](./assets/v7/tablet.png)
