@@ -8,7 +8,7 @@ body {
 }
 
 
-/* === START BUTTON === */ 
+/* === START BUTTON === */
 .button-container {
     padding-left: 15%;
     padding-right: 10%;
@@ -123,7 +123,7 @@ label {
 
 
 /* === CUSTOM SLIDER === */
-  
+
 .range-wrap, .range-wrap2 {
     position: relative;
 }
@@ -172,65 +172,68 @@ label {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .active, .accordion:hover, button.accordion p:hover, .banner div p:hover {
+}
+
+.active, .accordion:hover, button.accordion p:hover, .banner div p:hover {
     color: rgb(209 82 82);
-  }
-  
-  .panel {
+}
+
+.panel {
     padding: 0 18px;
     background-color: white;
     color: red;
-    max-height: 0;
+    /* max-height: 0; */
     overflow: hidden;
-    transition: max-height 0.2s ease-out;
+
+    height: 0;
+    transition: all 0.2s ease ;
 
     width: 100%;
     display: flex;
+    /* display: none; */
     flex-direction: row;
     justify-content: space-around;
-  }
+}
 
-  /* icons */
+/* icons */
 
-  button.accordion:after {
+button.accordion:after {
     /* content: 'EXPAND \02795'; Unicode character for "plus" sign (+) */
-    content: 'EXPAND +';  
+    content: 'EXPAND +';
     font-size: large;
     color: red;
     float: right;
     margin-left: 5px;
-  }
-  
-  button.active:after {
+}
+
+button.active:after {
     /* content: "COLLAPSE \2796"; Unicode character for "minus" sign (-) */
-    content: "COLLAPSE -";  
+    content: "COLLAPSE -";
     color: red;
-  }
+}
 
-  .accordion p {
+.accordion p {
     margin: 0;
-  }
+}
 
-  .panel div{
+.panel div {
     display: flex;
     flex-direction: column;
     /* color: red; */
-  }
+}
 
-  button.accordion, .banner div p{
+button.accordion, .banner div p {
     background-color: rgb(255, 201, 195);
     color: red;
     font-weight: bold;
     font-size: large;
-  }
+}
 
-  /* button.accordion p:hover, .banner div p:hover {
+/* button.accordion p:hover, .banner div p:hover {
     color: black;
   } */
 
-  .banner{
+.banner {
     background-color: rgb(255, 201, 195);
     color: red;
     width: 100%;
@@ -241,57 +244,64 @@ label {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-  }
+}
 
-  .banner div {
+.banner div {
     display: flex;
     flex-direction: row;
     align-items: center;
-  }
-  .banner div p, .banner div button{
+}
+
+.banner div p, .banner div button {
     width: 13vw;
     margin: 0;
     cursor: pointer;
-  }
-  .banner h3{
+    white-space: nowrap;
+}
+
+.banner h3 {
 
     margin-left: 20px;
 
-  }
+}
 
 /* control button contianer */
-.mode-container{
+.mode-container {
     display: flex;
     justify-content: space-between;
 }
 
-#score{
+#score {
     color: red;
     font-weight: 900;
     font-size: 1.5rem;
 }
 
-#score::before{
+#score::before {
     content: " Score: ";
 }
 
-#status{
+#status {
     display: none;
-    font-size:20px;
+    font-size: 20px;
     transform: scale(2);
     position: absolute;
     top: 25px;
     left: -60px;
 }
 
- 
-.shortcuts{
+
+.shortcuts {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     justify-content: space-around;
 }
 
-#icon{
+.shortcuts p::first-letter {
+    color: red;
+}
+
+#icon {
     display: none;
     transform: scale(2);
     top: 0px;
@@ -307,7 +317,7 @@ label {
     transition: opacity 500ms ease-in;
 }
 
-#speech-text{
+#speech-text {
     margin-left: -20px;
     width: 200px;
     position: absolute;
@@ -322,10 +332,11 @@ label {
     width: calc(var(--size) * 1px);
     position: relative;
     animation: time calc(var(--duration) * 1s) steps(1000, start) infinite;
-    mask: radial-gradient(transparent 50%,#000 50%);
-      /* mask: radial-gradient(transparent 50%,#000 50%); */
+    mask: radial-gradient(transparent 50%, #000 50%);
+    /* mask: radial-gradient(transparent 50%,#000 50%); */
     z-index: 1;
 }
+
 .mask {
     border-radius: 100% 0 0 100% / 50% 0 0 50%;
     height: 100%;
@@ -336,26 +347,116 @@ label {
     animation: mask calc(var(--duration) * 1s) steps(500, start) infinite;
     transform-origin: 100% 50%;
 }
+
 @keyframes time {
     100% {
         -webkit-transform: rotate(360deg);
     }
 }
+
 @keyframes mask {
     0% {
         background: #eee;
         -webkit-transform: rotate(0deg);
     }
+
     50% {
         background: #eee;
         -webkit-transform: rotate(-180deg);
     }
+
     50.01% {
         background: skyBlue;
         -webkit-transform: rotate(0deg);
     }
+
     100% {
         background: skyBlue;
         -webkit-transform: rotate(-180deg);
     }
+}
+
+
+@media only screen and (max-width: 746px) {
+    .display-area, .paste-area {
+        flex-direction: column;
+    }
+
+    .button-container {
+        padding-top: 5%;
+        flex-direction: column-reverse;
+    }
+
+    #meaning, #phrase, #script, #meaning-text, #phrase-text, #script-text {
+        width: 95%;
+    }
+
+    .accordion {
+        width: 80% !important;
+    }
+
+    .banner div p {
+        width: 30% !important;
+    }
+
+    #controls {
+        width: 100%;
+    }
+
+    #start-learning {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 475px) {
+    /* .mode-container, .shortcuts{
+        flex-direction: column;
+        margin: 0 auto;
+    } */
+
+    .mode-container {
+        flex-direction: column;
+    }
+
+    .mode-container button {
+        width: 100% !important;
+    }
+
+    .banner {
+        flex-direction: column;
+    }
+
+    .banner div {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .banner div p {
+        padding: 18px;
+    }
+
+    .accordion {
+        width: 50% !important;
+    }
+
+    .panel {
+        flex-direction: column;
+        /* overflow: scroll; */
+    }
+
+ 
+
+    #start-learning {
+        width: 60%;
+    }
+
+    #meaning-container, #phrase-container, #script-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #meaning-text, #phrase-text, #script-text {
+        white-space: nowrap;
+    }
+
 }
