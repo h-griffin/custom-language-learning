@@ -1,5 +1,4 @@
  
- 
 // ====================
 //  TEXT TO SPEECH  
 // ====================
@@ -26,13 +25,23 @@ scriptSpeech.lang = "ja"; // default - reset on select
 
 
 let voices = []; // global array of available voices
-window.speechSynthesis.onvoiceschanged = () => {
+
+// render voice select options
+if (/apple/i.test(navigator.vendor)) { // safari
+    getVoices();
+} else if ('onvoiceschanged' in window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = getVoices;
+} else {
+    alert('voice selection not available in this browser')
+}
+
+function getVoices() {
     voices = window.speechSynthesis.getVoices(); // list of all voices
 
     // create options for each language in the voice select drop down
     let scriptVoiceSelect = document.querySelector("#voices");
-    voices.forEach((voice, i) => (scriptVoiceSelect.options[i] = new Option(`${voice.name} - { ${voice.lang} } `, i)));
-
+    voices.forEach((voice, i) => { scriptVoiceSelect.options[i] = new Option(`${voice.name} - { ${voice.lang} } `, i) } );
+     
     // dynamically select en-US and ja-JP voices
     for(i=0; i < voices.length; i++){
         if(voices[i].lang == 'ja-JP' && voices[i].name == 'Kyoko'){
@@ -483,10 +492,14 @@ for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
     this.classList.toggle("active");
     var panel = document.querySelector(`.panel.${this.id}`);
-    if (panel.style.maxHeight) {
-      panel.style.maxHeight = null;
+    if (panel.style.height) {
+    //   panel.style.maxHeight = null;
+      panel.style.height = null
     } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
+        // panel.style.maxHeight = 0;
+    //   panel.style.maxHeight = panel.scrollHeight + "px";
+    //   console.log(i, panel.scrollHeight)
+        panel.style.height = 'auto';
     }
   });
 }
